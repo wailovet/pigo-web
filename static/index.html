@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.6.10/vue.js"></script>
+    <script src="https://cdn.staticfile.org/element-ui/2.11.1/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.11.1/theme-chalk/index.css">
+
+</head>
+<body>
+<div id="app">
+    <el-upload
+            drag
+            action="/Api/Face/Detect/Index"
+            :on-success="handleAvatarSuccess"
+            :show-file-list="false"
+            multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    </el-upload>
+</div>
+<canvas id="after_processing"  ></canvas>
+<script>
+    var after_processing = document.getElementById('after_processing');
+    var img = new Image();
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                visible: false
+            }
+        },
+        methods: {
+            handleAvatarSuccess(res, file) {
+
+
+                img.src = URL.createObjectURL(file.raw);
+                img.onload = function () {
+                    after_processing.width = img.width;
+                    after_processing.height = img.height;
+                    // 坐标(0,0) 表示从此处开始绘制，相当于偏移。
+                    after_processing.getContext("2d").drawImage(img, 0, 0);
+
+                    // console.log(URL.createObjectURL(file.raw))
+
+                    for(var i in res.data){
+
+                        after_processing.getContext("2d").rect(res.data[i]["x"],res.data[i]["y"],res.data[i]["w"],res.data[i]["h"]);
+                        after_processing.getContext("2d").stroke();
+                    }
+
+                }
+            },
+        }
+    })
+</script>
+</body>
+</html>
