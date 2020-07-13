@@ -20,11 +20,23 @@
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
 </div>
-<canvas id="after_processing"  ></canvas>
+<img src="demo0.jpg" alt="" id="start">
+<canvas id="after_processing"></canvas>
 <script>
     var after_processing = document.getElementById('after_processing');
-    var img = new Image();
-    new Vue({
+    var img = document.getElementById("start");
+
+    var img2 = new Image();
+    img2.onload = function(){
+
+        after_processing.width = img2.width;
+        after_processing.height = img2.height;
+        // 坐标(0,0) 表示从此处开始绘制，相当于偏移。
+        after_processing.getContext("2d").drawImage(img2, 0, 0);
+    };
+    img2.src = "demo.png";
+
+    var app = new Vue({
         el: '#app',
         data: function () {
             return {

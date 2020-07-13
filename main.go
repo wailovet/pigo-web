@@ -26,6 +26,7 @@ func main() {
 	})
 
 	data, _ := Asset("static/facefinder")
+	//data, _ := Asset("static/puploc")
 	pigoutil.InitCascade(data)
 
 	//go-bindata-assetfs static/...
